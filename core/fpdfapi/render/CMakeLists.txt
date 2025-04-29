@@ -1,0 +1,25 @@
+target_sources(pdfium_fpdfapi
+    PRIVATE
+        charposlist.cpp
+        cpdf_devicebuffer.cpp
+        cpdf_docrenderdata.cpp
+        cpdf_imagerenderer.cpp
+        cpdf_pagerendercontext.cpp
+        cpdf_progressiverenderer.cpp
+        cpdf_rendercontext.cpp
+        cpdf_renderoptions.cpp
+        cpdf_rendershading.cpp
+        cpdf_renderstatus.cpp
+        cpdf_rendertiling.cpp
+        cpdf_scaledrenderbuffer.cpp
+        cpdf_textrenderer.cpp
+        cpdf_type3cache.cpp
+        cpdf_type3glyphmap.cpp
+)
+
+if(WIN32)
+    target_sources(pdfium_fpdfapi
+        PRIVATE
+            cpdf_windowsrenderdevice.cpp
+    )
+endif()

@@ -1,0 +1,18 @@
+target_sources(pdfium_fpdfapi
+    PRIVATE
+        Adobe-CNS1-UCS2_5.cpp
+        B5pc-H_0.cpp
+        B5pc-V_0.cpp
+        CNS-EUC-H_0.cpp
+        CNS-EUC-V_0.cpp
+        ETen-B5-H_0.cpp
+        ETen-B5-V_0.cpp
+        ETenms-B5-H_0.cpp
+        ETenms-B5-V_0.cpp
+        HKscs-B5-H_5.cpp
+        HKscs-B5-V_5.cpp
+        UniCNS-UCS2-H_3.cpp
+        UniCNS-UCS2-V_3.cpp
+        UniCNS-UTF16-H_0.cpp
+        cmaps_cns1.cpp
+)

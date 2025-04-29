@@ -1,0 +1,23 @@
+target_sources(pdfium_fpdfapi
+    PRIVATE
+        83pv-RKSJ-H_1.cpp
+        90ms-RKSJ-H_2.cpp
+        90ms-RKSJ-V_2.cpp
+        90msp-RKSJ-H_2.cpp
+        90msp-RKSJ-V_2.cpp
+        90pv-RKSJ-H_1.cpp
+        Add-RKSJ-H_1.cpp
+        Add-RKSJ-V_1.cpp
+        Adobe-Japan1-UCS2_4.cpp
+        EUC-H_1.cpp
+        EUC-V_1.cpp
+        Ext-RKSJ-H_2.cpp
+        Ext-RKSJ-V_2.cpp
+        H_1.cpp
+        UniJIS-UCS2-HW-H_4.cpp
+        UniJIS-UCS2-HW-V_4.cpp
+        UniJIS-UCS2-H_4.cpp
+        UniJIS-UCS2-V_4.cpp
+        V_1.cpp
+        cmaps_japan1.cpp
+)

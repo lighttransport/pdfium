@@ -1,0 +1,15 @@
+target_sources(pdfium_fpdfapi
+    PRIVATE
+        Adobe-Korea1-UCS2_2.cpp
+        KSC-EUC-H_0.cpp
+        KSC-EUC-V_0.cpp
+        KSCms-UHC-HW-H_1.cpp
+        KSCms-UHC-HW-V_1.cpp
+        KSCms-UHC-H_1.cpp
+        KSCms-UHC-V_1.cpp
+        KSCpc-EUC-H_0.cpp
+        UniKS-UCS2-H_1.cpp
+        UniKS-UCS2-V_1.cpp
+        UniKS-UTF16-H_0.cpp
+        cmaps_korea1.cpp
+)

@@ -1,0 +1,16 @@
+target_sources(pdfium_sdk
+    PRIVATE
+        cpwl_button.cpp
+        cpwl_caret.cpp
+        cpwl_cbbutton.cpp
+        cpwl_cblistbox.cpp
+        cpwl_combo_box.cpp
+        cpwl_edit.cpp
+        cpwl_edit_impl.cpp
+        cpwl_list_box.cpp
+        cpwl_list_ctrl.cpp
+        cpwl_sbbutton.cpp
+        cpwl_scroll_bar.cpp
+        cpwl_special_button.cpp
+        cpwl_wnd.cpp
+)

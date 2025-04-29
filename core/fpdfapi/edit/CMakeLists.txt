@@ -1,0 +1,11 @@
+target_sources(pdfium_fpdfapi
+    PRIVATE
+        cpdf_contentstream_write_utils.cpp
+        cpdf_creator.cpp
+        cpdf_npagetooneexporter.cpp
+        cpdf_pagecontentgenerator.cpp
+        cpdf_pagecontentmanager.cpp
+        cpdf_pageexporter.cpp
+        cpdf_pageorganizer.cpp
+        cpdf_stringarchivestream.cpp
+)

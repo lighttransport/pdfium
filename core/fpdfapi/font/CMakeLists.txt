@@ -1,0 +1,18 @@
+target_sources(pdfium_fpdfapi
+    PRIVATE
+        cfx_cttgsubtable.cpp
+        cfx_stockfontarray.cpp
+        cpdf_cid2unicodemap.cpp
+        cpdf_cidfont.cpp
+        cpdf_cmap.cpp
+        cpdf_cmapparser.cpp
+        cpdf_font.cpp
+        cpdf_fontencoding.cpp
+        cpdf_fontglobals.cpp
+        cpdf_simplefont.cpp
+        cpdf_tounicodemap.cpp
+        cpdf_truetypefont.cpp
+        cpdf_type1font.cpp
+        cpdf_type3char.cpp
+        cpdf_type3font.cpp
+)

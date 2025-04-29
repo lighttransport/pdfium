@@ -1,0 +1,17 @@
+target_sources(pdfium_fpdfapi
+    PRIVATE
+        Adobe-GB1-UCS2_5.cpp
+        GB-EUC-H_0.cpp
+        GB-EUC-V_0.cpp
+        GBK-EUC-H_2.cpp
+        GBK-EUC-V_2.cpp
+        GBK2K-H_5.cpp
+        GBK2K-V_5.cpp
+        GBKp-EUC-H_2.cpp
+        GBKp-EUC-V_2.cpp
+        GBpc-EUC-H_0.cpp
+        GBpc-EUC-V_0.cpp
+        UniGB-UCS2-H_4.cpp
+        UniGB-UCS2-V_4.cpp
+        cmaps_gb1.cpp
+)

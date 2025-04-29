@@ -1,0 +1,13 @@
+target_sources(pdfium_fxge
+    PRIVATE
+        blend.cpp
+        cfx_bitmapstorer.cpp
+        cfx_cmyk_to_srgb.cpp
+        cfx_dibbase.cpp
+        cfx_dibitmap.cpp
+        cfx_imagestretcher.cpp
+        cfx_imagetransformer.cpp
+        cfx_scanlinecompositor.cpp
+        cstretchengine.cpp
+        fx_dib.cpp
+)

@@ -1,0 +1,19 @@
+target_sources(pdfium_fxge
+    PRIVATE
+        FoxitDingbats.cpp
+        FoxitFixed.cpp
+        FoxitFixedBold.cpp
+        FoxitFixedBoldItalic.cpp
+        FoxitFixedItalic.cpp
+        FoxitSans.cpp
+        FoxitSansBold.cpp
+        FoxitSansBoldItalic.cpp
+        FoxitSansItalic.cpp
+        FoxitSansMM.cpp
+        FoxitSerif.cpp
+        FoxitSerifBold.cpp
+        FoxitSerifBoldItalic.cpp
+        FoxitSerifItalic.cpp
+        FoxitSerifMM.cpp
+        FoxitSymbol.cpp
+)
