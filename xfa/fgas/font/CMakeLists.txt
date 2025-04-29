@@ -1,0 +1,9 @@
+target_sources(pdfium_xfa
+    PRIVATE
+        cfgas_defaultfontmanager.cpp
+        cfgas_fontmgr.cpp
+        cfgas_gefont.cpp
+        cfgas_gemodule.cpp
+        cfgas_pdffontmgr.cpp
+        fgas_fontutils.cpp
+)

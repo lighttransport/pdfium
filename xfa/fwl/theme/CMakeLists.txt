@@ -1,0 +1,15 @@
+target_sources(pdfium_xfa
+    PRIVATE
+        cfwl_barcodetp.cpp
+        cfwl_carettp.cpp
+        cfwl_checkboxtp.cpp
+        cfwl_comboboxtp.cpp
+        cfwl_datetimepickertp.cpp
+        cfwl_edittp.cpp
+        cfwl_listboxtp.cpp
+        cfwl_monthcalendartp.cpp
+        cfwl_pictureboxtp.cpp
+        cfwl_pushbuttontp.cpp
+        cfwl_scrollbartp.cpp
+        cfwl_widgettp.cpp
+)

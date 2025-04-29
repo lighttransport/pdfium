@@ -1,0 +1,14 @@
+target_sources(pdfium_xfa
+    PRIVATE
+        cfgas_break.cpp
+        cfgas_breakline.cpp
+        cfgas_breakpiece.cpp
+        cfgas_char.cpp
+        cfgas_linkuserdata.cpp
+        cfgas_rtfbreak.cpp
+        cfgas_textpiece.cpp
+        cfgas_textuserdata.cpp
+        cfgas_txtbreak.cpp
+        fgas_arabic.cpp
+        fgas_linebreak.cpp
+)

@@ -1,0 +1,44 @@
+target_sources(pdfium_xfa
+    PRIVATE
+        cxfa_eventparam.cpp
+        cxfa_ffapp.cpp
+        cxfa_ffarc.cpp
+        cxfa_ffbarcode.cpp
+        cxfa_ffcheckbutton.cpp
+        cxfa_ffcombobox.cpp
+        cxfa_ffdatetimeedit.cpp
+        cxfa_ffdoc.cpp
+        cxfa_ffdocview.cpp
+        cxfa_ffdropdown.cpp
+        cxfa_ffexclgroup.cpp
+        cxfa_fffield.cpp
+        cxfa_ffimage.cpp
+        cxfa_ffimageedit.cpp
+        cxfa_ffline.cpp
+        cxfa_fflistbox.cpp
+        cxfa_ffnotify.cpp
+        cxfa_ffnumericedit.cpp
+        cxfa_ffpageview.cpp
+        cxfa_ffpasswordedit.cpp
+        cxfa_ffpushbutton.cpp
+        cxfa_ffrectangle.cpp
+        cxfa_ffsignature.cpp
+        cxfa_fftext.cpp
+        cxfa_fftextedit.cpp
+        cxfa_ffwidget.cpp
+        cxfa_ffwidgethandler.cpp
+        cxfa_fontmgr.cpp
+        cxfa_fwladapterwidgetmgr.cpp
+        cxfa_fwltheme.cpp
+        cxfa_imagerenderer.cpp
+        cxfa_readynodeiterator.cpp
+        cxfa_textlayout.cpp
+        cxfa_textparser.cpp
+        cxfa_textprovider.cpp
+        cxfa_texttabstopscontext.cpp
+)
+
+# Add subdirectories
+add_subdirectory(formcalc)
+add_subdirectory(layout)
+add_subdirectory(parser)

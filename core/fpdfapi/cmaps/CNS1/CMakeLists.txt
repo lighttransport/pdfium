@@ -1,3 +1,5 @@
+# CMake file for CNS1 CMap resources
+
 target_sources(pdfium_fpdfapi
     PRIVATE
         Adobe-CNS1-UCS2_5.cpp

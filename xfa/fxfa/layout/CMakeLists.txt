@@ -1,0 +1,9 @@
+target_sources(pdfium_xfa
+    PRIVATE
+        cxfa_contentlayoutitem.cpp
+        cxfa_contentlayoutprocessor.cpp
+        cxfa_layoutitem.cpp
+        cxfa_layoutprocessor.cpp
+        cxfa_viewlayoutitem.cpp
+        cxfa_viewlayoutprocessor.cpp
+)

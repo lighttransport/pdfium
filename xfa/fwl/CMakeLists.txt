@@ -1,0 +1,39 @@
+target_sources(pdfium_xfa
+    PRIVATE
+        cfwl_app.cpp
+        cfwl_barcode.cpp
+        cfwl_caret.cpp
+        cfwl_checkbox.cpp
+        cfwl_combobox.cpp
+        cfwl_comboedit.cpp
+        cfwl_combolist.cpp
+        cfwl_datetimeedit.cpp
+        cfwl_datetimepicker.cpp
+        cfwl_edit.cpp
+        cfwl_event.cpp
+        cfwl_eventmouse.cpp
+        cfwl_eventscroll.cpp
+        cfwl_eventselectchanged.cpp
+        cfwl_eventtextwillchange.cpp
+        cfwl_eventvalidate.cpp
+        cfwl_listbox.cpp
+        cfwl_message.cpp
+        cfwl_messagekey.cpp
+        cfwl_messagekillfocus.cpp
+        cfwl_messagemouse.cpp
+        cfwl_messagemousewheel.cpp
+        cfwl_messagesetfocus.cpp
+        cfwl_monthcalendar.cpp
+        cfwl_notedriver.cpp
+        cfwl_picturebox.cpp
+        cfwl_pushbutton.cpp
+        cfwl_scrollbar.cpp
+        cfwl_themebackground.cpp
+        cfwl_themepart.cpp
+        cfwl_themetext.cpp
+        cfwl_widget.cpp
+        cfwl_widgetmgr.cpp
+        ifwl_themeprovider.cpp
+)
+
+add_subdirectory(theme)

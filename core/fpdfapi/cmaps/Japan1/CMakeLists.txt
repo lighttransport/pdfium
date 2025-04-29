@@ -1,3 +1,5 @@
+# CMake file for Japan1 CMap resources
+
 target_sources(pdfium_fpdfapi
     PRIVATE
         83pv-RKSJ-H_1.cpp

@@ -1,3 +1,5 @@
+# CMake file for Korea1 CMap resources
+
 target_sources(pdfium_fpdfapi
     PRIVATE
         Adobe-Korea1-UCS2_2.cpp

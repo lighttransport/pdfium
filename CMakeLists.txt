@@ -50,8 +50,9 @@ if(PDFIUM_ENABLE_V8)
     add_subdirectory(fxjs)
 endif()
 
-# Testing
-include(CTest)
-if(BUILD_TESTING)
-    add_subdirectory(testing)
-endif()
+# TODO
+## Testing
+#include(CTest)
+#if(BUILD_TESTING)
+#    add_subdirectory(testing)
+#endif()

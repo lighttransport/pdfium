@@ -1,0 +1,34 @@
+@PACKAGE_INIT@
+
+include(${CMAKE_CURRENT_LIST_DIR}/pdfium-targets.cmake)
+
+# Check if optional components are available
+set(_supported_components V8 XFA Skia)
+
+foreach(_comp ${PDFium_FIND_COMPONENTS})
+  if (NOT _comp IN_LIST _supported_components)
+    set(PDFium_FOUND False)
+    set(PDFium_NOT_FOUND_MESSAGE "Unsupported component: ${_comp}")
+    return()
+  endif()
+  
+  if (_comp STREQUAL "V8")
+    if (NOT @PDFIUM_ENABLE_V8@)
+      set(PDFium_${_comp}_FOUND FALSE)
+    else()
+      set(PDFium_${_comp}_FOUND TRUE)
+    endif()
+  elseif (_comp STREQUAL "XFA")
+    if (NOT @PDFIUM_ENABLE_XFA@)
+      set(PDFium_${_comp}_FOUND FALSE)
+    else()
+      set(PDFium_${_comp}_FOUND TRUE)
+    endif()
+  elseif (_comp STREQUAL "Skia")
+    if (NOT @PDFIUM_USE_SKIA@)
+      set(PDFium_${_comp}_FOUND FALSE)
+    else()
+      set(PDFium_${_comp}_FOUND TRUE)
+    endif()
+  endif()
+endforeach()

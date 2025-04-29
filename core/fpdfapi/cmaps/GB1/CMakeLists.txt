@@ -1,3 +1,5 @@
+# CMake file for GB1 CMap resources
+
 target_sources(pdfium_fpdfapi
     PRIVATE
         Adobe-GB1-UCS2_5.cpp

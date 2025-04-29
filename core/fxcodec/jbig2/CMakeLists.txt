@@ -1,0 +1,21 @@
+target_sources(pdfium_fxcodec
+    PRIVATE
+        JBig2_ArithDecoder.cpp
+        JBig2_ArithIntDecoder.cpp
+        JBig2_BitStream.cpp
+        JBig2_Context.cpp
+        JBig2_DocumentContext.cpp
+        JBig2_GrdProc.cpp
+        JBig2_GrrdProc.cpp
+        JBig2_HtrdProc.cpp
+        JBig2_HuffmanDecoder.cpp
+        JBig2_HuffmanTable.cpp
+        JBig2_Image.cpp
+        JBig2_PatternDict.cpp
+        JBig2_PddProc.cpp
+        JBig2_SddProc.cpp
+        JBig2_Segment.cpp
+        JBig2_SymbolDict.cpp
+        JBig2_TrdProc.cpp
+        jbig2_decoder.cpp
+)
