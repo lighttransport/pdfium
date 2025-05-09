@@ -34,7 +34,7 @@ struct FX_HATCHDATA {
   uint8_t maskBits[64];
 };
 
-constexpr auto kHatchBitmapData = fxcrt::ToArray<const FX_HATCHDATA>({
+constexpr auto kHatchBitmapData = std::to_array<const FX_HATCHDATA>({
     {16,  // Horizontal
      16,
      {
@@ -262,9 +262,8 @@ void CFGAS_GEGraphics::FillPathWithPattern(
 
   auto mask = pdfium::MakeRetain<CFX_DIBitmap>();
   CHECK(mask->Create(data.width, data.height, FXDIB_Format::k1bppMask));
-  fxcrt::Copy(
-      pdfium::make_span(data.maskBits).first(mask->GetPitch() * data.height),
-      mask->GetWritableBuffer());
+  fxcrt::Copy(pdfium::span(data.maskBits).first(mask->GetPitch() * data.height),
+              mask->GetWritableBuffer());
   const CFX_FloatRect rectf =
       matrix.TransformRect(path.GetPath().GetBoundingBox());
   const FX_RECT rect = rectf.ToRoundedFxRect();

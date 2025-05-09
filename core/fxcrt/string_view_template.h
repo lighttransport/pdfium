@@ -50,9 +50,9 @@ class StringViewTemplate {
   // NOLINTNEXTLINE(runtime/explicit)
   StringViewTemplate(const CharType* ptr) noexcept
       // SAFETY: from length() function.
-      : span_(UNSAFE_BUFFERS(pdfium::make_span(
-            reinterpret_cast<const UnsignedType*>(ptr),
-            ptr ? std::char_traits<CharType>::length(ptr) : 0))) {}
+      : span_(UNSAFE_BUFFERS(
+            pdfium::span(reinterpret_cast<const UnsignedType*>(ptr),
+                         ptr ? std::char_traits<CharType>::length(ptr) : 0))) {}
 
   explicit constexpr StringViewTemplate(
       const pdfium::span<const CharType>& other) noexcept {
@@ -61,10 +61,10 @@ class StringViewTemplate {
     }
   }
 
-  template <typename E = typename std::enable_if<
-                !std::is_same<UnsignedType, CharType>::value>::type>
   explicit constexpr StringViewTemplate(
-      const pdfium::span<const UnsignedType>& other) noexcept {
+      const pdfium::span<const UnsignedType>& other) noexcept
+    requires(!std::is_same<UnsignedType, CharType>::value)
+  {
     if (!other.empty()) {
       span_ = other;
     }
@@ -81,21 +81,19 @@ class StringViewTemplate {
   constexpr StringViewTemplate(const CharType* ptr, size_t size) noexcept
       // SAFETY: propagated to caller via UNSAFE_BUFFER_USAGE.
       : span_(UNSAFE_BUFFERS(
-            pdfium::make_span(reinterpret_cast<const UnsignedType*>(ptr),
-                              size))) {}
+            pdfium::span(reinterpret_cast<const UnsignedType*>(ptr), size))) {}
 
-  template <typename E = typename std::enable_if<
-                !std::is_same<UnsignedType, CharType>::value>::type>
   UNSAFE_BUFFER_USAGE constexpr StringViewTemplate(const UnsignedType* ptr,
                                                    size_t size) noexcept
+    requires(!std::is_same<UnsignedType, CharType>::value)
       // SAFETY: propagated to caller via UNSAFE_BUFFER_USAGE.
-      : span_(UNSAFE_BUFFERS(pdfium::make_span(ptr, size))) {}
+      : span_(UNSAFE_BUFFERS(pdfium::span(ptr, size))) {}
 
   StringViewTemplate& operator=(const CharType* src) {
     // SAFETY: caller ensures `src` is nul-terminated so `length()` is correct.
     span_ = UNSAFE_BUFFERS(
-        pdfium::make_span(reinterpret_cast<const UnsignedType*>(src),
-                          src ? std::char_traits<CharType>::length(src) : 0));
+        pdfium::span(reinterpret_cast<const UnsignedType*>(src),
+                     src ? std::char_traits<CharType>::length(src) : 0));
     return *this;
   }
 
@@ -117,17 +115,12 @@ class StringViewTemplate {
     return const_reverse_iterator(begin());
   }
 
-  bool operator==(const StringViewTemplate& other) const {
-    return std::equal(span_.begin(), span_.end(), other.span_.begin(),
-                      other.span_.end());
+  friend bool operator==(const StringViewTemplate& lhs,
+                         const StringViewTemplate& rhs) {
+    return lhs.span_ == rhs.span_;
   }
-  bool operator==(const CharType* ptr) const {
-    StringViewTemplate other(ptr);
-    return *this == other;
-  }
-  bool operator!=(const CharType* ptr) const { return !(*this == ptr); }
-  bool operator!=(const StringViewTemplate& other) const {
-    return !(*this == other);
+  friend bool operator==(const StringViewTemplate& lhs, const CharType* ptr) {
+    return lhs == StringViewTemplate(ptr);
   }
 
   bool IsASCII() const {
@@ -193,8 +186,8 @@ class StringViewTemplate {
     return reinterpret_cast<const CharType*>(span_.data());
   }
 
-  size_t GetLength() const { return span_.size(); }
-  bool IsEmpty() const { return span_.empty(); }
+  constexpr size_t GetLength() const { return span_.size(); }
+  constexpr bool IsEmpty() const { return span_.empty(); }
   bool IsValidIndex(size_t index) const { return index < span_.size(); }
   bool IsValidLength(size_t length) const { return length <= span_.size(); }
 
@@ -311,14 +304,6 @@ class StringViewTemplate {
   void* operator new(size_t) throw() { return nullptr; }
 };
 
-template <typename T>
-inline bool operator==(const T* lhs, const StringViewTemplate<T>& rhs) {
-  return rhs == lhs;
-}
-template <typename T>
-inline bool operator!=(const T* lhs, const StringViewTemplate<T>& rhs) {
-  return rhs != lhs;
-}
 template <typename T>
 inline bool operator<(const T* lhs, const StringViewTemplate<T>& rhs) {
   return rhs > lhs;

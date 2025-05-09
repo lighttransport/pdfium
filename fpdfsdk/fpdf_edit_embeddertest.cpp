@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 
+#include <array>
 #include <limits>
 #include <memory>
 #include <ostream>
@@ -25,7 +26,7 @@
 #include "core/fxcrt/fx_codepage.h"
 #include "core/fxcrt/fx_memcpy_wrappers.h"
 #include "core/fxcrt/fx_system.h"
-#include "core/fxcrt/span_util.h"
+#include "core/fxcrt/span.h"
 #include "core/fxcrt/stl_util.h"
 #include "core/fxge/cfx_defaultrenderdevice.h"
 #include "core/fxge/fx_font.h"
@@ -3791,7 +3792,7 @@ end
 end
 )";
 
-  static constexpr auto kCidToGidMap = fxcrt::ToArray<const uint8_t>(
+  static constexpr auto kCidToGidMap = std::to_array<const uint8_t>(
       {0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8, 0, 9});
 
   ScopedFPDFFont font(FPDFText_LoadCidType2Font(
@@ -3859,7 +3860,7 @@ end
 )";
 
   static constexpr auto kCidToGidMap =
-      fxcrt::ToArray<const uint8_t>({0, 0, 0, 1, 0, 2, 0, 3, 0, 4});
+      std::to_array<const uint8_t>({0, 0, 0, 1, 0, 2, 0, 3, 0, 4});
 
   ScopedFPDFFont font(FPDFText_LoadCidType2Font(
       document(), font_data.data(), font_data.size(), kToUnicodeCMap,
@@ -4149,8 +4150,7 @@ TEST_F(FPDFEditEmbedderTest, AddMarkedText) {
   EXPECT_TRUE(FPDFPageObjMark_GetParamBlobValue(
       mark, "BlobKey", blob_buffer, sizeof(blob_buffer), &out_buffer_len));
   EXPECT_EQ(kBlobLen, out_buffer_len);
-  EXPECT_TRUE(fxcrt::span_equals(pdfium::make_span(kBlobData),
-                                 pdfium::make_span(blob_buffer)));
+  EXPECT_EQ(pdfium::span(kBlobData), blob_buffer);
 
   // Render and check the bitmap is the expected one.
   {

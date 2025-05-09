@@ -314,10 +314,11 @@ CPDF_Parser::Error CPDF_Parser::StartParseInternal() {
 }
 
 FX_FILESIZE CPDF_Parser::ParseStartXRef() {
-  static constexpr char kStartXRefKeyword[] = "startxref";
-  syntax_->SetPos(syntax_->GetDocumentSize() -
-                  UNSAFE_TODO(strlen(kStartXRefKeyword)));
-  if (!syntax_->BackwardsSearchToWord(kStartXRefKeyword, 4096)) {
+  static constexpr auto kStartXRefKeyword =
+      pdfium::span_from_cstring("startxref");
+  syntax_->SetPos(syntax_->GetDocumentSize() - kStartXRefKeyword.size());
+  if (!syntax_->BackwardsSearchToWord(ByteStringView(kStartXRefKeyword),
+                                      4096)) {
     return 0;
   }
 
@@ -576,7 +577,7 @@ bool CPDF_Parser::ParseAndAppendCrossRefSubsectionData(
   while (entries_to_read > 0) {
     const uint32_t entries_in_block = std::min(entries_to_read, 1024u);
     const uint32_t bytes_to_read = entries_in_block * kEntrySize;
-    auto block_span = pdfium::make_span(buf).first(bytes_to_read);
+    auto block_span = pdfium::span(buf).first(bytes_to_read);
     if (!syntax_->ReadBlock(pdfium::as_writable_bytes(block_span))) {
       return false;
     }
@@ -590,7 +591,7 @@ bool CPDF_Parser::ParseAndAppendCrossRefSubsectionData(
       ObjectInfo& info = obj_data.info;
 
       pdfium::span<const char> pEntry =
-          pdfium::make_span(buf).subspan(i * kEntrySize);
+          pdfium::span(buf).subspan(i * kEntrySize);
       if (pEntry[17] == 'f') {
         info.pos = 0;
         info.type = ObjectType::kFree;
@@ -1069,7 +1070,7 @@ RetainPtr<CPDF_Object> CPDF_Parser::ParseIndirectObject(uint32_t objnum) {
     return nullptr;
   }
 
-  ScopedSetInsertion<uint32_t> local_insert(&parsing_obj_nums_, objnum);
+  ScopedSetInsertion local_insert(&parsing_obj_nums_, objnum);
   const auto* info = cross_ref_table_->GetObjectInfo(objnum);
   if (!info) {
     return nullptr;
@@ -1118,7 +1119,7 @@ const CPDF_ObjectStream* CPDF_Parser::GetObjectStream(uint32_t object_number) {
   }
 
   // Keep track of `object_number` before doing more parsing.
-  ScopedSetInsertion<uint32_t> local_insert(&parsing_obj_nums_, object_number);
+  ScopedSetInsertion local_insert(&parsing_obj_nums_, object_number);
 
   RetainPtr<CPDF_Object> object =
       ParseIndirectObjectAt(object_pos, object_number);
@@ -1394,11 +1395,11 @@ bool CPDF_Parser::WriteToArchive(IFX_ArchiveStream* archive,
   while (src_size) {
     const uint32_t block_size =
         static_cast<uint32_t>(std::min(kBufferSize, src_size));
-    auto block_span = pdfium::make_span(buffer).first(block_size);
+    auto block_span = pdfium::span(buffer).first(block_size);
     if (!syntax_->ReadBlock(block_span)) {
       return false;
     }
-    if (!archive->WriteBlock(pdfium::make_span(buffer).first(block_size))) {
+    if (!archive->WriteBlock(pdfium::span(buffer).first(block_size))) {
       return false;
     }
     src_size -= block_size;

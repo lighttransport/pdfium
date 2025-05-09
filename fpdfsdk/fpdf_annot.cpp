@@ -33,6 +33,7 @@
 #include "core/fpdfdoc/cpdf_interactiveform.h"
 #include "core/fxcrt/check.h"
 #include "core/fxcrt/containers/contains.h"
+#include "core/fxcrt/containers/unique_ptr_adapters.h"
 #include "core/fxcrt/fx_safe_types.h"
 #include "core/fxcrt/fx_string_wrappers.h"
 #include "core/fxcrt/numerics/safe_conversions.h"
@@ -456,10 +457,10 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFPage_GetAnnotIndex(FPDF_PAGE page,
   }
 
   CPDF_ArrayLocker locker(pAnnots);
-  auto it = std::find_if(locker.begin(), locker.end(),
-                         [pAnnotDict](const RetainPtr<CPDF_Object>& candidate) {
-                           return candidate->GetDirect() == pAnnotDict;
-                         });
+  auto it = std::ranges::find_if(
+      locker, [pAnnotDict](const RetainPtr<CPDF_Object>& candidate) {
+        return candidate->GetDirect() == pAnnotDict;
+      });
 
   if (it == locker.end()) {
     return -1;
@@ -529,7 +530,8 @@ FPDFAnnot_UpdateObject(FPDF_ANNOTATION annot, FPDF_PAGEOBJECT obj) {
 
   // Check that the object is already in this annotation's object list.
   CPDF_Form* pForm = pAnnot->GetForm();
-  if (!pdfium::Contains(*pForm, fxcrt::MakeFakeUniquePtr(pObj))) {
+  if (std::ranges::find_if(*pForm, pdfium::MatchesUniquePtr(pObj)) ==
+      pForm->end()) {
     return false;
   }
 
@@ -557,7 +559,7 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFAnnot_AddInkStroke(FPDF_ANNOTATION annot,
   }
 
   // SAFETY: required from caller.
-  auto points_span = UNSAFE_BUFFERS(pdfium::make_span(points, point_count));
+  auto points_span = UNSAFE_BUFFERS(pdfium::span(points, point_count));
   auto ink_coord_list = inklist->AppendNew<CPDF_Array>();
   for (const auto& point : points_span) {
     ink_coord_list->AppendNew<CPDF_Number>(point.x);
@@ -615,7 +617,8 @@ FPDFAnnot_AppendObject(FPDF_ANNOTATION annot, FPDF_PAGEOBJECT obj) {
   // Note that an object that came from a different annotation must not be
   // passed here, since an object cannot belong to more than one annotation.
   CPDF_Form* pForm = pAnnot->GetForm();
-  if (pdfium::Contains(*pForm, fxcrt::MakeFakeUniquePtr(pObj))) {
+  if (std::ranges::find_if(*pForm, pdfium::MatchesUniquePtr(pObj)) !=
+      pForm->end()) {
     return false;
   }
 
@@ -952,7 +955,7 @@ FPDFAnnot_GetVertices(FPDF_ANNOTATION annot,
       fxcrt::CollectionSize<unsigned long>(*vertices) / 2;
   if (buffer && length >= points_len) {
     // SAFETY: required from caller.
-    auto buffer_span = UNSAFE_BUFFERS(pdfium::make_span(buffer, length));
+    auto buffer_span = UNSAFE_BUFFERS(pdfium::span(buffer, length));
     for (unsigned long i = 0; i < points_len; ++i) {
       buffer_span[i].x = vertices->GetFloatAt(i * 2);
       buffer_span[i].y = vertices->GetFloatAt(i * 2 + 1);
@@ -987,7 +990,7 @@ FPDFAnnot_GetInkListPath(FPDF_ANNOTATION annot,
       fxcrt::CollectionSize<unsigned long>(*path) / 2;
   if (buffer && length >= points_len) {
     // SAFETY: required from caller.
-    auto buffer_span = UNSAFE_BUFFERS(pdfium::make_span(buffer, length));
+    auto buffer_span = UNSAFE_BUFFERS(pdfium::span(buffer, length));
     for (unsigned long i = 0; i < points_len; ++i) {
       buffer_span[i].x = path->GetFloatAt(i * 2);
       buffer_span[i].y = path->GetFloatAt(i * 2 + 1);
@@ -1158,7 +1161,7 @@ FPDFAnnot_SetAP(FPDF_ANNOTATION annot,
   }
 
   static constexpr auto kModeKeyForMode =
-      fxcrt::ToArray<const char*>({"N", "R", "D"});
+      std::to_array<const char*>({"N", "R", "D"});
   static_assert(kModeKeyForMode.size() == FPDF_ANNOT_APPEARANCEMODE_COUNT,
                 "length of kModeKeyForMode should be equal to "
                 "FPDF_ANNOT_APPEARANCEMODE_COUNT");
@@ -1291,6 +1294,19 @@ FPDF_EXPORT int FPDF_CALLCONV
 FPDFAnnot_GetFormFieldFlags(FPDF_FORMHANDLE hHandle, FPDF_ANNOTATION annot) {
   CPDF_FormField* pFormField = GetFormField(hHandle, annot);
   return pFormField ? pFormField->GetFieldFlags() : FPDF_FORMFLAG_NONE;
+}
+
+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
+FPDFAnnot_SetFormFieldFlags(FPDF_FORMHANDLE handle,
+                            FPDF_ANNOTATION annot,
+                            int flags) {
+  CPDF_FormField* form_field = GetFormField(handle, annot);
+  if (!form_field) {
+    return false;
+  }
+
+  form_field->SetFieldFlags(flags);
+  return true;
 }
 
 FPDF_EXPORT FPDF_ANNOTATION FPDF_CALLCONV
@@ -1515,7 +1531,7 @@ FPDFAnnot_SetFocusableSubtypes(FPDF_FORMHANDLE hHandle,
   }
 
   // SAFETY: required from caller.
-  auto subtypes_span = UNSAFE_BUFFERS(pdfium::make_span(subtypes, count));
+  auto subtypes_span = UNSAFE_BUFFERS(pdfium::span(subtypes, count));
   std::vector<CPDF_Annot::Subtype> focusable_annot_types;
   focusable_annot_types.reserve(count);
   for (size_t i = 0; i < count; ++i) {
@@ -1562,7 +1578,7 @@ FPDFAnnot_GetFocusableSubtypes(FPDF_FORMHANDLE hHandle,
   }
 
   // SAFETY: required from caller.
-  auto subtypes_span = UNSAFE_BUFFERS(pdfium::make_span(subtypes, count));
+  auto subtypes_span = UNSAFE_BUFFERS(pdfium::span(subtypes, count));
   for (size_t i = 0; i < focusable_annot_types.size(); ++i) {
     subtypes_span[i] =
         static_cast<FPDF_ANNOTATION_SUBTYPE>(focusable_annot_types[i]);

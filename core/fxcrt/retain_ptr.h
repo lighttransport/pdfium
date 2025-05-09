@@ -49,15 +49,13 @@ class TRIVIAL_ABI RetainPtr {
   RetainPtr(RetainPtr&& that) noexcept { Unleak(that.Leak()); }
 
   // Copy conversion constructor.
-  template <class U,
-            typename = typename std::enable_if<
-                std::is_convertible<U*, T*>::value>::type>
+  template <class U>
+    requires(std::is_convertible_v<U*, T*>)
   RetainPtr(const RetainPtr<U>& that) : RetainPtr(that.Get()) {}
 
   // Move-conversion constructor.
-  template <class U,
-            typename = typename std::enable_if<
-                std::is_convertible<U*, T*>::value>::type>
+  template <class U>
+    requires(std::is_convertible_v<U*, T*>)
   RetainPtr(RetainPtr<U>&& that) noexcept {
     Unleak(that.Leak());
   }
@@ -85,9 +83,8 @@ class TRIVIAL_ABI RetainPtr {
   }
 
   // Copy-convert assign a RetainPtr.
-  template <class U,
-            typename = typename std::enable_if<
-                std::is_convertible<U*, T*>::value>::type>
+  template <class U>
+    requires(std::is_convertible_v<U*, T*>)
   RetainPtr& operator=(const RetainPtr<U>& that) {
     if (*this != that) {
       Reset(that.Get());
@@ -96,9 +93,8 @@ class TRIVIAL_ABI RetainPtr {
   }
 
   // Move-convert assign a RetainPtr. After assignment, |that| will be NULL.
-  template <class U,
-            typename = typename std::enable_if<
-                std::is_convertible<U*, T*>::value>::type>
+  template <class U>
+    requires(std::is_convertible_v<U*, T*>)
   RetainPtr& operator=(RetainPtr<U>&& that) noexcept {
     Unleak(that.Leak());
     return *this;
@@ -132,17 +128,13 @@ class TRIVIAL_ABI RetainPtr {
   T* Leak() { return obj_.release(); }
   void Unleak(T* ptr) { obj_.reset(ptr); }
 
-  bool operator==(const RetainPtr& that) const { return Get() == that.Get(); }
-  bool operator!=(const RetainPtr& that) const { return !(*this == that); }
-
-  template <typename U>
-  bool operator==(const U& that) const {
-    return Get() == that;
+  friend inline bool operator==(const RetainPtr& lhs, const RetainPtr& rhs) {
+    return lhs.Get() == rhs.Get();
   }
 
   template <typename U>
-  bool operator!=(const U& that) const {
-    return !(*this == that);
+  friend inline bool operator==(const RetainPtr& lhs, const U& rhs) {
+    return lhs.Get() == rhs;
   }
 
   bool operator<(const RetainPtr& that) const {

@@ -29,25 +29,24 @@
 
 #include "core/fxcrt/compiler_specific.h"
 #include "core/fxcrt/fx_extension.h"
-#include "core/fxcrt/stl_util.h"
 #include "fxbarcode/BC_Writer.h"
 #include "fxbarcode/oned/BC_OneDimWriter.h"
 
 namespace {
 
-constexpr auto kOnedCode39Alphabet = fxcrt::ToArray<const char>(
+constexpr auto kOnedCode39Alphabet = std::to_array<const char>(
     {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
      'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
      'U', 'V', 'W', 'X', 'Y', 'Z', '-', '.', ' ', '*', '$', '/', '+', '%'});
 constexpr size_t kOnedCode39AlphabetLen = std::size(kOnedCode39Alphabet);
 
-constexpr auto kOnedCode39Checksum = fxcrt::ToArray<const char>(
+constexpr auto kOnedCode39Checksum = std::to_array<const char>(
     {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
      'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
      'U', 'V', 'W', 'X', 'Y', 'Z', '-', '.', ' ', '$', '/', '+', '%'});
 static_assert(std::size(kOnedCode39Checksum) == 43, "Wrong size");
 
-constexpr auto kOnedCode39CharacterEncoding = fxcrt::ToArray<const uint16_t>(
+constexpr auto kOnedCode39CharacterEncoding = std::to_array<const uint16_t>(
     {0x0034, 0x0121, 0x0061, 0x0160, 0x0031, 0x0130, 0x0070, 0x0025, 0x0124,
      0x0064, 0x0109, 0x0049, 0x0148, 0x0019, 0x0118, 0x0058, 0x000D, 0x010C,
      0x004C, 0x001C, 0x0103, 0x0043, 0x0142, 0x0013, 0x0112, 0x0052, 0x0007,
@@ -181,7 +180,7 @@ DataVector<uint8_t> CBC_OnedCode39Writer::Encode(const ByteString& contents) {
     }
   }
   DataVector<uint8_t> result(code_width);
-  auto result_span = pdfium::make_span(result);
+  auto result_span = pdfium::span(result);
   ToIntArray(kOnedCode39CharacterEncoding[39], wide_narr_ratio_, widths);
   result_span = AppendPattern(result_span, widths, true);
 

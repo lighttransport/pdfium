@@ -18,7 +18,6 @@
 #include "core/fxcrt/byteorder.h"
 #include "core/fxcrt/compiler_specific.h"
 #include "core/fxcrt/data_vector.h"
-#include "core/fxcrt/stl_util.h"
 
 namespace fxcodec {
 
@@ -243,7 +242,7 @@ GifDecoder::Status CFX_GifContext::LoadFrame(size_t frame_num) {
       SaveDecodingStatus(GIF_D_STATUS_IMG_DATA);
       img_row_offset_ += img_row_avail_size_;
       img_row_avail_size_ = gif_img_row_bytes - img_row_offset_;
-      auto img_row_span = pdfium::make_span(gif_image->row_buffer)
+      auto img_row_span = pdfium::span(gif_image->row_buffer)
                               .subspan(img_row_offset_, img_row_avail_size_);
       LZWDecompressor::Status ret = UNSAFE_TODO(
           lzw_decompressor_->Decode(img_row_span.data(), &img_row_avail_size_));
@@ -276,7 +275,7 @@ GifDecoder::Status CFX_GifContext::LoadFrame(size_t frame_num) {
             SaveDecodingStatus(GIF_D_STATUS_IMG_DATA);
             img_row_offset_ += img_row_avail_size_;
             img_row_avail_size_ = gif_img_row_bytes - img_row_offset_;
-            img_row_span = pdfium::make_span(gif_image->row_buffer)
+            img_row_span = pdfium::span(gif_image->row_buffer)
                                .subspan(img_row_offset_, img_row_avail_size_);
             ret = UNSAFE_TODO(lzw_decompressor_->Decode(img_row_span.data(),
                                                         &img_row_avail_size_));
@@ -302,7 +301,7 @@ GifDecoder::Status CFX_GifContext::LoadFrame(size_t frame_num) {
 
           img_row_offset_ = 0;
           img_row_avail_size_ = gif_img_row_bytes;
-          img_row_span = pdfium::make_span(gif_image->row_buffer)
+          img_row_span = pdfium::span(gif_image->row_buffer)
                              .subspan(img_row_offset_, img_row_avail_size_);
           ret = UNSAFE_TODO(lzw_decompressor_->Decode(img_row_span.data(),
                                                       &img_row_avail_size_));

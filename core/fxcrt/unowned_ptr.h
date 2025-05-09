@@ -92,15 +92,13 @@ class TRIVIAL_ABI GSL_POINTER UnownedPtr {
       : obj_(that.ExtractAsDangling()) {}
 
   // Copy-conversion constructor.
-  template <class U,
-            typename = typename std::enable_if<
-                std::is_convertible<U*, T*>::value>::type>
+  template <class U>
+    requires(std::is_convertible_v<U*, T*>)
   UnownedPtr(const UnownedPtr<U>& that) : obj_(static_cast<U*>(that)) {}
 
   // Move-conversion constructor.
-  template <class U,
-            typename = typename std::enable_if<
-                std::is_convertible<U*, T*>::value>::type>
+  template <class U>
+    requires(std::is_convertible_v<U*, T*>)
   UnownedPtr(UnownedPtr<U>&& that) noexcept : obj_(that.ExtractAsDangling()) {}
 
   // Assign an UnownedPtr from nullptr.
@@ -129,9 +127,8 @@ class TRIVIAL_ABI GSL_POINTER UnownedPtr {
   }
 
   // Copy-convert assignment.
-  template <class U,
-            typename = typename std::enable_if<
-                std::is_convertible<U*, T*>::value>::type>
+  template <class U>
+    requires(std::is_convertible_v<U*, T*>)
   UnownedPtr& operator=(const UnownedPtr<U>& that) noexcept {
     if (*this != that) {
       obj_ = static_cast<U*>(that);
@@ -140,9 +137,8 @@ class TRIVIAL_ABI GSL_POINTER UnownedPtr {
   }
 
   // Move-convert assignment. After assignment, |that| will be NULL.
-  template <class U,
-            typename = typename std::enable_if<
-                std::is_convertible<U*, T*>::value>::type>
+  template <class U>
+    requires(std::is_convertible_v<U*, T*>)
   UnownedPtr& operator=(UnownedPtr<U>&& that) noexcept {
     if (*this != that) {
       obj_ = that.ExtractAsDangling();
@@ -152,9 +148,11 @@ class TRIVIAL_ABI GSL_POINTER UnownedPtr {
 
   ~UnownedPtr() { obj_ = nullptr; }
 
-  bool operator==(std::nullptr_t ptr) const { return obj_ == nullptr; }
-  bool operator==(const UnownedPtr& that) const {
-    return obj_ == static_cast<T*>(that);
+  friend inline bool operator==(const UnownedPtr& lhs, std::nullptr_t rhs) {
+    return lhs.obj_ == nullptr;
+  }
+  friend inline bool operator==(const UnownedPtr& lhs, const UnownedPtr& rhs) {
+    return lhs.obj_ == rhs.obj_;
   }
   bool operator<(const UnownedPtr& that) const {
     return std::less<T*>()(obj_, static_cast<T*>(that));

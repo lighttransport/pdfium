@@ -94,6 +94,7 @@ int CheckPDFiumCApi() {
     CHK(FPDFAnnot_SetColor);
     CHK(FPDFAnnot_SetFlags);
     CHK(FPDFAnnot_SetFocusableSubtypes);
+    CHK(FPDFAnnot_SetFormFieldFlags);
     CHK(FPDFAnnot_SetRect);
     CHK(FPDFAnnot_SetStringValue);
     CHK(FPDFAnnot_SetURI);
@@ -109,6 +110,7 @@ int CheckPDFiumCApi() {
     CHK(FPDFAttachment_GetFile);
     CHK(FPDFAttachment_GetName);
     CHK(FPDFAttachment_GetStringValue);
+    CHK(FPDFAttachment_GetSubtype);
     CHK(FPDFAttachment_GetValueType);
     CHK(FPDFAttachment_HasKey);
     CHK(FPDFAttachment_SetFile);

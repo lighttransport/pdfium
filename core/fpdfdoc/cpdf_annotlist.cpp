@@ -30,6 +30,7 @@
 #include "core/fpdfdoc/cpdf_generateap.h"
 #include "core/fpdfdoc/cpdf_interactiveform.h"
 #include "core/fxcrt/check.h"
+#include "core/fxcrt/containers/unique_ptr_adapters.h"
 
 namespace {
 
@@ -233,10 +234,8 @@ CPDF_AnnotList::~CPDF_AnnotList() {
 }
 
 bool CPDF_AnnotList::Contains(const CPDF_Annot* pAnnot) const {
-  auto it = std::find_if(annot_list_.begin(), annot_list_.end(),
-                         [pAnnot](const std::unique_ptr<CPDF_Annot>& annot) {
-                           return annot.get() == pAnnot;
-                         });
+  auto it = std::ranges::find_if(
+      annot_list_, pdfium::MatchesUniquePtr(const_cast<CPDF_Annot*>(pAnnot)));
   return it != annot_list_.end();
 }
 
