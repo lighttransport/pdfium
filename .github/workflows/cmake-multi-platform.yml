@@ -4,9 +4,9 @@ name: CMake on multiple platforms
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "cmake" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "cmake" ]
 
 jobs:
   build:
